@@ -6,6 +6,7 @@ from model.musica import adicionar_musica
 from model.musica import excluir_musica
 from model.musica import ativar_musica
 from model.usuario import adicionar_usuario
+from model.usuario import verificar_usuario
 
 app = Flask(__name__)
 
@@ -73,6 +74,17 @@ def pegar_dados():
 @app.route("/login", methods=["GET"])
 def fazer_login():
     return render_template("login.html")
+
+@app.route("/login", methods=["POST"])
+def rota_login_usuario():
+    nome_usuario = request.form.get("usuario")
+    senha = request.form.get("senha")
+    usuario = verificar_usuario(nome_usuario, senha)
+
+    if usuario:
+        return redirect("/adimn")
+    else:
+        return redirect("/login")
 
 if __name__ == "__main__":
     app.run(debug=True)
