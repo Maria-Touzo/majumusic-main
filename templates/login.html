@@ -9,6 +9,13 @@
     
     <h1>Tela de Login</h1>
     <div>
+        {%with mensagens = get_flashed_messages()%}
+            {%for mensagem in mensagens%}
+        <h3>
+            {{Mensagem}}
+        </h3>
+            {%endfor%}
+        {%endwith%}
         <form action="/login" method="post">
             <p>
                 Usuário

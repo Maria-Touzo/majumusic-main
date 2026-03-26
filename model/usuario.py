@@ -19,15 +19,17 @@ def adicionar_usuario(nome:str, senha:str):
     except Exception as erro:
         print (erro)    
      
-def verificar_usuario(login:str, senha:str)-> list:
+def verificar_usuario(login:str, senha:str):
     """
     Função que verifica se o usuário está cadastrado
     Se estiver cadastrado retorno os dados d usuário
     Se não estiver cadastrado retorno None
     """
-
-    conexao, cursor = conexao.conectar()
-    cursor.execute("SELECT login, senha FROM usuario WHERE login = %s and senha = %s ", (login, senha))
-    usuario = cursor.fetchone()
-    conexao.close()
-    return usuario
+    try:
+        conexao, cursor = conexao.conectar()
+        cursor.execute("SELECT login, senha FROM usuario WHERE login = %s and senha = %s ", (login, senha))
+        usuario = cursor.fetchone()
+        conexao.close()
+        return usuario
+    except Exception as erro:
+        print(erro)

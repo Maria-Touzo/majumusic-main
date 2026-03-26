@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, session, flash
 import mysql.connector
 from model.musica import recuperar_musicas
 from model.genero import recuperar_generos
@@ -9,6 +9,8 @@ from model.usuario import adicionar_usuario
 from model.usuario import verificar_usuario
 
 app = Flask(__name__)
+
+
 
 @app.route("/")
 @app.route("/home", methods=["GET"])
@@ -22,6 +24,8 @@ def pagina_principal():
 
 @app.route("/admin")
 def pagina_admin():
+    if "usuario_logado" not in session:
+        return redirect("/login")
     musicas = recuperar_musicas()
     generos = recuperar_generos()
     return render_template("administracao.html", musicas = musicas, generos = generos)
@@ -82,9 +86,17 @@ def rota_login_usuario():
     usuario = verificar_usuario(nome_usuario, senha)
 
     if usuario:
+        session["usuário logado"] = usuario
+        flash(f"Seja bem-vindo, {usuario.nome}")
         return redirect("/adimn")
     else:
+        flash("Usuário ou senha invalida!", "danger")
         return redirect("/login")
+    
+@app.route("/logoff")
+def logoff():
+    session.clear()
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
